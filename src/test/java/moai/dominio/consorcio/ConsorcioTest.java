@@ -2,6 +2,7 @@ package moai.dominio.consorcio;
 
 import static org.junit.Assert.*;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import moai.dominio.excecao.ExcecaoDeCampoObrigatorio;
 public class ConsorcioTest {
 
 	private static final Consorciado CONSORCIADO_NULO = null;
+	private static final BigDecimal VALOR_DA_PARCELA_NULA = null;
+	private static final BigDecimal VALOR_DA_PARCELA_ZERADO = BigDecimal.ZERO;
 
 	@Test
 	public void um_consorcio_deve_ter_um_gerente() throws Exception {
@@ -43,5 +46,24 @@ public class ConsorcioTest {
 	@Test(expected = ExcecaoDeCampoObrigatorio.class)
 	public void nao_deve_ser_possivel_informar_uma_lista_de_consorciados_vazias() throws Exception {
 		ConsorcioBuilder.novo().comConsorciados(Arrays.asList()).criar();
+	}
+	
+	@Test
+	public void um_consorcio_deve_ter_o_valor_da_parcela() throws Exception {
+		BigDecimal valorDaParcela = BigDecimal.valueOf(100d);
+		
+		Consorcio consorcio = ConsorcioBuilder.novo().comValorDaParcela(valorDaParcela).criar();
+		
+		assertEquals(valorDaParcela, consorcio.getValorDaParcela());
+	}
+	
+	@Test(expected = ExcecaoDeCampoObrigatorio.class)
+	public void nao_deve_permitir_criar_um_consorcio_sem_o_valor_da_parcela() throws Exception {
+		ConsorcioBuilder.novo().comValorDaParcela(VALOR_DA_PARCELA_NULA).criar();
+	}
+	
+	@Test(expected = ParcelaDeveSerMaiorQueZero.class)
+	public void nao_deve_permitir_informar_uma_parcela_com_valor_zerado() throws Exception {
+		ConsorcioBuilder.novo().comValorDaParcela(VALOR_DA_PARCELA_ZERADO).criar();
 	}
 }

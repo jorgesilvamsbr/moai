@@ -1,5 +1,6 @@
 package moai.dominio.consorcio;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -17,15 +18,19 @@ public class Consorcio {
 	@OneToOne
 	private Consorciado gerente;
 
-	public Consorcio(Consorciado gerente) throws ExcecaoDeCampoObrigatorio {
-		validarCamposObrigatorios(gerente);
+	private BigDecimal valorDaParcela;
+
+	public Consorcio(Consorciado gerente, BigDecimal valorDaParcela) throws ExcecaoDeCampoObrigatorio, ParcelaDeveSerMaiorQueZero {
+		validarCamposObrigatorios(gerente, valorDaParcela);
+		verificaSeAParcelaEhMaiorQueZero(valorDaParcela);
+		this.valorDaParcela = valorDaParcela;
 		this.gerente = gerente;
 	}
 
-	private void validarCamposObrigatorios(Consorciado gerente) throws ExcecaoDeCampoObrigatorio {
-		new ExcecaoDeCampoObrigatorio()
-		.quandoNulo(gerente, "Responsavel pelo consorcio não foi informado")
-		.entaoDispara();
+	private void verificaSeAParcelaEhMaiorQueZero(BigDecimal valorDaParcela) throws ParcelaDeveSerMaiorQueZero {
+		if(BigDecimal.ZERO.compareTo(valorDaParcela) == 0){
+			throw new ParcelaDeveSerMaiorQueZero();
+		}
 	}
 
 	public void setConsorciados(List<Consorciado> consorciados) throws ExcecaoDeCampoObrigatorio {
@@ -40,6 +45,10 @@ public class Consorcio {
 	public Consorciado getGerente() {
 		return gerente;
 	}
+
+	public BigDecimal getValorDaParcela() {
+		return valorDaParcela;
+	}
 	
 	private void validarSeAListaNaoEstaVazia(List<Consorciado> consorciados) throws ExcecaoDeCampoObrigatorio {
 		new ExcecaoDeCampoObrigatorio()
@@ -47,4 +56,10 @@ public class Consorcio {
 		.entaoDispara();
 	}
 	
+	private void validarCamposObrigatorios(Consorciado gerente, BigDecimal valorDaParcela) throws ExcecaoDeCampoObrigatorio {
+		new ExcecaoDeCampoObrigatorio()
+		.quandoNulo(gerente, "Responsavel pelo consorcio não foi informado")
+		.quandoNulo(valorDaParcela, "Parcela não informada")
+		.entaoDispara();
+	}
 }
