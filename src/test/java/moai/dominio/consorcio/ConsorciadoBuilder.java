@@ -1,6 +1,6 @@
-package moai.dominio.moai;
+package moai.dominio.consorcio;
 
-import moai.dominio.moai.Consorciado;
+import moai.dominio.consorcio.Consorciado;
 
 public class ConsorciadoBuilder {
 

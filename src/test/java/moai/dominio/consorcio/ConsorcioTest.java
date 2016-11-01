@@ -1,4 +1,4 @@
-package moai.dominio.moai;
+package moai.dominio.consorcio;
 
 import static org.junit.Assert.*;
 
@@ -7,11 +7,11 @@ import java.util.List;
 
 import org.junit.Test;
 
+import moai.dominio.consorcio.Consorciado;
+import moai.dominio.consorcio.Consorcio;
 import moai.dominio.excecao.ExcecaoDeCampoObrigatorio;
-import moai.dominio.moai.Consorcio;
-import moai.dominio.moai.Consorciado;
 
-public class MoaiTest {
+public class ConsorcioTest {
 
 	private static final Consorciado CONSORCIADO_NULO = null;
 
@@ -37,7 +37,7 @@ public class MoaiTest {
 		
 		Consorcio consorcio = ConsorcioBuilder.novo().comConsorciados(listaDeConsorciados).criar();
 		
-		assertEquals(quantidadeEsperada, consorcio.getPessoas().size());
+		assertEquals(quantidadeEsperada, consorcio.getConsorciados().size());
 	}
 	
 	@Test(expected = ExcecaoDeCampoObrigatorio.class)

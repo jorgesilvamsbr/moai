@@ -1,11 +1,11 @@
-package moai.dominio.moai;
+package moai.dominio.consorcio;
 
 import java.util.Arrays;
 import java.util.List;
 
+import moai.dominio.consorcio.Consorciado;
+import moai.dominio.consorcio.Consorcio;
 import moai.dominio.excecao.ExcecaoDeCampoObrigatorio;
-import moai.dominio.moai.Consorcio;
-import moai.dominio.moai.Consorciado;
 
 public class ConsorcioBuilder {
 
@@ -33,7 +33,7 @@ public class ConsorcioBuilder {
 
 	public Consorcio criar() throws ExcecaoDeCampoObrigatorio {
 		Consorcio moai = new Consorcio(gerenteDoConsorcio);
-		moai.setPessoas(listaDeConsorciados);
+		moai.setConsorciados(listaDeConsorciados);
 		return moai;
 	}
 }

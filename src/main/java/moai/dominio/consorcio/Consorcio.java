@@ -1,4 +1,4 @@
-package moai.dominio.moai;
+package moai.dominio.consorcio;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import moai.dominio.excecao.ExcecaoDeCampoObrigatorio;
 public class Consorcio {
 
 	@OneToMany
-	private List<Consorciado> pessoas;
+	private List<Consorciado> consorciados;
 	
 	@OneToOne
 	private Consorciado gerente;
@@ -28,22 +28,22 @@ public class Consorcio {
 		.entaoDispara();
 	}
 
-	public void setPessoas(List<Consorciado> pessoas) throws ExcecaoDeCampoObrigatorio {
-		validarSeAListaNaoEstaVazia(pessoas);
-		this.pessoas = pessoas;
+	public void setConsorciados(List<Consorciado> consorciados) throws ExcecaoDeCampoObrigatorio {
+		validarSeAListaNaoEstaVazia(consorciados);
+		this.consorciados = consorciados;
 	}
 
-	public List<Consorciado> getPessoas() {
-		return this.pessoas;
+	public List<Consorciado> getConsorciados() {
+		return this.consorciados;
 	}
 	
 	public Consorciado getGerente() {
 		return gerente;
 	}
 	
-	private void validarSeAListaNaoEstaVazia(List<Consorciado> pessoas) throws ExcecaoDeCampoObrigatorio {
+	private void validarSeAListaNaoEstaVazia(List<Consorciado> consorciados) throws ExcecaoDeCampoObrigatorio {
 		new ExcecaoDeCampoObrigatorio()
-		.quandoListaVazia(pessoas, "Lista de pessoas esta vazia")
+		.quandoListaVazia(consorciados, "Lista de consorciados esta vazia")
 		.entaoDispara();
 	}
 	
