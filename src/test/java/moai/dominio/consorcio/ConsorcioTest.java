@@ -4,10 +4,13 @@ import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
 
+import br.com.moai.comum.Mes;
+import br.com.moai.comum.DateUtils;
 import moai.dominio.consorcio.Consorciado;
 import moai.dominio.consorcio.Consorcio;
 import moai.dominio.excecao.ExcecaoDeCampoObrigatorio;
@@ -17,6 +20,7 @@ public class ConsorcioTest {
 	private static final Consorciado CONSORCIADO_NULO = null;
 	private static final BigDecimal VALOR_DA_PARCELA_NULA = null;
 	private static final BigDecimal VALOR_DA_PARCELA_ZERADO = BigDecimal.ZERO;
+	private static final Date DATA_NULA = null;
 
 	@Test
 	public void um_consorcio_deve_ter_um_gerente() throws Exception {
@@ -65,5 +69,29 @@ public class ConsorcioTest {
 	@Test(expected = ParcelaDeveSerMaiorQueZero.class)
 	public void nao_deve_permitir_informar_uma_parcela_com_valor_zerado() throws Exception {
 		ConsorcioBuilder.novo().comValorDaParcela(VALOR_DA_PARCELA_ZERADO).criar();
+	}
+	
+	@Test
+	public void deve_poder_informar_o_periodo() throws Exception {
+		Date dataInicial = DateUtils.criarDataPara(01, Mes.ABRIL, 2016);
+		Date dataFinal = DateUtils.criarDataPara(01, Mes.ABRIL, 2017);
+		
+		Consorcio consorcio = ConsorcioBuilder.novo().comDataInicial(dataInicial).comDataFinal(dataFinal).criar();
+		
+		assertEquals(dataInicial, consorcio.getDataInicial());
+		assertEquals(dataFinal, consorcio.getDataFinal());
+	}
+	
+	@Test(expected = ExcecaoDeCampoObrigatorio.class)
+	public void nao_deve_permitir_informar_datas_nulas() throws Exception {
+		ConsorcioBuilder.novo().comDataInicial(DATA_NULA).comDataFinal(DATA_NULA).criar();
+	}
+	
+	@Test(expected = DatasInvalidas.class)
+	public void a_data_final_do_consorcio_deve_ser_maior_que_a_data_incial() throws Exception {
+		Date dataInicial = DateUtils.criarDataPara(01, Mes.ABRIL, 2016);
+		Date dataFinal = DateUtils.criarDataPara(01, Mes.FEVEREIRO, 2016);
+		
+		ConsorcioBuilder.novo().comDataInicial(dataInicial).comDataFinal(dataFinal).criar();
 	}
 }

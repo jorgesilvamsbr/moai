@@ -1,6 +1,7 @@
 package moai.dominio.consorcio;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -20,9 +21,16 @@ public class Consorcio {
 
 	private BigDecimal valorDaParcela;
 
-	public Consorcio(Consorciado gerente, BigDecimal valorDaParcela) throws ExcecaoDeCampoObrigatorio, ParcelaDeveSerMaiorQueZero {
-		validarCamposObrigatorios(gerente, valorDaParcela);
+	private Date dataInicial;
+
+	private Date dataFinal;
+
+	public Consorcio(Consorciado gerente, BigDecimal valorDaParcela, Date dataInicial, Date dataFinal) throws ExcecaoDeCampoObrigatorio, ParcelaDeveSerMaiorQueZero, DatasInvalidas {
+		validarCamposObrigatorios(gerente, valorDaParcela, dataInicial, dataFinal);
 		verificaSeAParcelaEhMaiorQueZero(valorDaParcela);
+		validarDatas(dataInicial, dataFinal);
+		this.dataInicial = dataInicial;
+		this.dataFinal = dataFinal;
 		this.valorDaParcela = valorDaParcela;
 		this.gerente = gerente;
 	}
@@ -50,16 +58,32 @@ public class Consorcio {
 		return valorDaParcela;
 	}
 	
+	public Date getDataFinal() {
+		return dataFinal;
+	}
+	
+	public Date getDataInicial() {
+		return dataInicial;
+	}
+	
 	private void validarSeAListaNaoEstaVazia(List<Consorciado> consorciados) throws ExcecaoDeCampoObrigatorio {
 		new ExcecaoDeCampoObrigatorio()
 		.quandoListaVazia(consorciados, "Lista de consorciados esta vazia")
 		.entaoDispara();
 	}
 	
-	private void validarCamposObrigatorios(Consorciado gerente, BigDecimal valorDaParcela) throws ExcecaoDeCampoObrigatorio {
+	private void validarCamposObrigatorios(Consorciado gerente, BigDecimal valorDaParcela, Date dataInicial, Date dataFinal) throws ExcecaoDeCampoObrigatorio {
 		new ExcecaoDeCampoObrigatorio()
 		.quandoNulo(gerente, "Responsavel pelo consorcio não foi informado")
 		.quandoNulo(valorDaParcela, "Parcela não informada")
+		.quandoNulo(dataInicial, "Data inicial não informada")
+		.quandoNulo(dataFinal, "Data final não informada")
 		.entaoDispara();
+	}
+	
+	private void validarDatas(Date dataInicial, Date dataFinal) throws DatasInvalidas {
+		if(dataFinal.compareTo(dataInicial) <= 0){
+			throw new DatasInvalidas();
+		}
 	}
 }
