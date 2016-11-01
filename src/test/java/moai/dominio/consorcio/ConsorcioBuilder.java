@@ -19,6 +19,8 @@ public class ConsorcioBuilder {
 	private BigDecimal valorDaParcela;
 	private Date dataInicial;
 	private Date dataFinal;
+	private int vencimento;
+	private int contemplacao;
 
 	public ConsorcioBuilder() throws ParseException {
 		this.listaDeConsorciados = Arrays.asList(ConsorciadoBuilder.novo().criar());
@@ -26,6 +28,8 @@ public class ConsorcioBuilder {
 		this.valorDaParcela = BigDecimal.TEN;
 		this.dataInicial = DateUtils.criarDataPara(1, Mes.JANEIRO, 2015);
 		this.dataFinal = DateUtils.hoje();
+		this.vencimento = 10;
+		this.contemplacao = 15;
 	}
 
 	public static ConsorcioBuilder novo() throws ParseException {
@@ -56,9 +60,19 @@ public class ConsorcioBuilder {
 		this.dataFinal = dataFinal;
 		return this;
 	}
+	
+	public ConsorcioBuilder comDiaDeVencimento(int vencimento) {
+		this.vencimento = vencimento;
+		return this;
+	}
 
-	public Consorcio criar() throws ExcecaoDeCampoObrigatorio, ParcelaDeveSerMaiorQueZero, DatasInvalidas {
-		Consorcio consorcio = new Consorcio(gerenteDoConsorcio, valorDaParcela, dataInicial, dataFinal);
+	public ConsorcioBuilder comDiaDeContemplacao(int contemplacao) {
+		this.contemplacao = contemplacao;
+		return this;
+	}
+
+	public Consorcio criar() throws ExcecaoDeCampoObrigatorio, ParcelaDeveSerMaiorQueZero, DatasInvalidas, DiaInvalido {
+		Consorcio consorcio = new Consorcio(gerenteDoConsorcio, valorDaParcela, dataInicial, dataFinal, vencimento, contemplacao);
 		consorcio.setConsorciados(listaDeConsorciados);
 		return consorcio;
 	}

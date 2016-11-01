@@ -94,4 +94,42 @@ public class ConsorcioTest {
 		
 		ConsorcioBuilder.novo().comDataInicial(dataInicial).comDataFinal(dataFinal).criar();
 	}
+	
+	@Test
+	public void deve_ser_possivel_informar_o_dia_de_vencimento() throws Exception {
+		int vencimento = 5;
+		
+		Consorcio consorcio = ConsorcioBuilder.novo().comDiaDeVencimento(vencimento).criar();
+		
+		assertEquals(vencimento, consorcio.getVencimento());
+	}
+	
+	@Test(expected = DiaInvalido.class)
+	public void nao_deve_permitir_informar_o_dia_de_vencimento_zerado() throws Exception {
+		ConsorcioBuilder.novo().comDiaDeVencimento(0).criar();
+	}
+	
+	@Test(expected = DiaInvalido.class)
+	public void nao_deve_permitir_informar_o_dia_de_vencimento_maior_que_trinta_e_um() throws Exception {
+		ConsorcioBuilder.novo().comDiaDeVencimento(32).criar();
+	}
+	
+	@Test
+	public void deve_ser_possivel_informar_o_dia_de_contemplacao() throws Exception {
+		int contemplacao = 10;
+		
+		Consorcio consorcio = ConsorcioBuilder.novo().comDiaDeContemplacao(contemplacao).criar();
+		
+		assertEquals(contemplacao, consorcio.getVencimento());
+	}
+	
+	@Test(expected = DiaInvalido.class)
+	public void nao_deve_permitir_informar_o_dia_de_contemplacao_zerado() throws Exception {
+		ConsorcioBuilder.novo().comDiaDeVencimento(0).criar();
+	}
+	
+	@Test(expected = DiaInvalido.class)
+	public void nao_deve_permitir_informar_o_dia_de_contemplacao_maior_que_trinta_e_um() throws Exception {
+		ConsorcioBuilder.novo().comDiaDeVencimento(32).criar();
+	}
 }
