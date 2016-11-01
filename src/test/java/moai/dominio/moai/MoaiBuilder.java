@@ -1,7 +1,11 @@
-package moai.dominio;
+package moai.dominio.moai;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import moai.dominio.excecao.ExcecaoDeCampoObrigatorio;
+import moai.dominio.moai.Moai;
+import moai.dominio.moai.Pessoa;
 
 public class MoaiBuilder {
 
@@ -19,7 +23,9 @@ public class MoaiBuilder {
 		return this;
 	}
 
-	public Moai criar() {
-		return new Moai(this.pessoas);
+	public Moai criar() throws ExcecaoDeCampoObrigatorio {
+		Moai moai = new Moai();
+		moai.setPessoas(pessoas);
+		return moai;
 	}
 }

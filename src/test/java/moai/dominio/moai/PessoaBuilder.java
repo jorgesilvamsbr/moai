@@ -1,6 +1,6 @@
-package moai.dominio;
+package moai.dominio.moai;
 
-import moai.dominio.Pessoa;
+import moai.dominio.moai.Pessoa;
 
 public class PessoaBuilder {
 

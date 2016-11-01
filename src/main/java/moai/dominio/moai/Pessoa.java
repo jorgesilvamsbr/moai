@@ -1,4 +1,4 @@
-package moai.dominio;
+package moai.dominio.moai;
 
 import javax.persistence.Entity;
 
