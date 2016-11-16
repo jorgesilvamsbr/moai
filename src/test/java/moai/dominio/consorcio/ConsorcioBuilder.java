@@ -8,6 +8,7 @@ import java.util.List;
 
 import br.com.moai.comum.DateUtils;
 import br.com.moai.comum.Mes;
+import br.com.moai.comum.MesInvalido;
 import moai.dominio.consorcio.Consorciado;
 import moai.dominio.consorcio.Consorcio;
 import moai.dominio.excecao.ExcecaoDeCampoObrigatorio;
@@ -18,7 +19,6 @@ public class ConsorcioBuilder {
 	private Consorciado gerenteDoConsorcio;
 	private BigDecimal valorDaParcela;
 	private Date dataInicial;
-	private Date dataFinal;
 	private int vencimento;
 	private int contemplacao;
 
@@ -27,7 +27,6 @@ public class ConsorcioBuilder {
 		this.gerenteDoConsorcio = ConsorciadoBuilder.novo().comNome("Jorge Gerente da Silva").criar();
 		this.valorDaParcela = BigDecimal.TEN;
 		this.dataInicial = DateUtils.criarDataPara(1, Mes.JANEIRO, 2015);
-		this.dataFinal = DateUtils.hoje();
 		this.vencimento = 10;
 		this.contemplacao = 15;
 	}
@@ -56,11 +55,6 @@ public class ConsorcioBuilder {
 		return this;
 	}
 	
-	public ConsorcioBuilder comDataFinal(Date dataFinal) {
-		this.dataFinal = dataFinal;
-		return this;
-	}
-	
 	public ConsorcioBuilder comDiaDeVencimento(int vencimento) {
 		this.vencimento = vencimento;
 		return this;
@@ -71,8 +65,8 @@ public class ConsorcioBuilder {
 		return this;
 	}
 
-	public Consorcio criar() throws ExcecaoDeCampoObrigatorio, ParcelaDeveSerMaiorQueZero, DatasInvalidas, DiaInvalido {
-		Consorcio consorcio = new Consorcio(gerenteDoConsorcio, valorDaParcela, dataInicial, dataFinal, vencimento, contemplacao);
+	public Consorcio criar() throws ExcecaoDeCampoObrigatorio, ParcelaDeveSerMaiorQueZero, DatasInvalidas, DiaInvalido, MesInvalido {
+		Consorcio consorcio = new Consorcio(gerenteDoConsorcio, valorDaParcela, dataInicial, vencimento, contemplacao);
 		consorcio.setConsorciados(listaDeConsorciados);
 		return consorcio;
 	}

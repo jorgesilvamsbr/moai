@@ -3,10 +3,12 @@ package moai.dominio.consorcio;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import br.com.moai.comum.Mes;
@@ -21,6 +23,16 @@ public class ConsorcioTest {
 	private static final BigDecimal VALOR_DA_PARCELA_NULA = null;
 	private static final BigDecimal VALOR_DA_PARCELA_ZERADO = BigDecimal.ZERO;
 	private static final Date DATA_NULA = null;
+	private List<Consorciado> consorciados;
+	
+	@Before
+	public void init(){
+		this.consorciados = new ArrayList<>();
+		this.consorciados.add(ConsorciadoBuilder.novo().comNome("Jorge").criar());
+		this.consorciados.add(ConsorciadoBuilder.novo().comNome("Paulo").criar());
+		this.consorciados.add(ConsorciadoBuilder.novo().comNome("Pedro").criar());
+		
+	}
 
 	@Test
 	public void um_consorcio_deve_ter_um_gerente() throws Exception {
@@ -72,27 +84,17 @@ public class ConsorcioTest {
 	}
 	
 	@Test
-	public void deve_poder_informar_o_periodo() throws Exception {
+	public void deve_poder_informar_o_inicio_do_periodo() throws Exception {
 		Date dataInicial = DateUtils.criarDataPara(01, Mes.ABRIL, 2016);
-		Date dataFinal = DateUtils.criarDataPara(01, Mes.ABRIL, 2017);
 		
-		Consorcio consorcio = ConsorcioBuilder.novo().comDataInicial(dataInicial).comDataFinal(dataFinal).criar();
+		Consorcio consorcio = ConsorcioBuilder.novo().comDataInicial(dataInicial).criar();
 		
 		assertEquals(dataInicial, consorcio.getDataInicial());
-		assertEquals(dataFinal, consorcio.getDataFinal());
 	}
 	
 	@Test(expected = ExcecaoDeCampoObrigatorio.class)
 	public void nao_deve_permitir_informar_datas_nulas() throws Exception {
-		ConsorcioBuilder.novo().comDataInicial(DATA_NULA).comDataFinal(DATA_NULA).criar();
-	}
-	
-	@Test(expected = DatasInvalidas.class)
-	public void a_data_final_do_consorcio_deve_ser_maior_que_a_data_incial() throws Exception {
-		Date dataInicial = DateUtils.criarDataPara(01, Mes.ABRIL, 2016);
-		Date dataFinal = DateUtils.criarDataPara(01, Mes.FEVEREIRO, 2016);
-		
-		ConsorcioBuilder.novo().comDataInicial(dataInicial).comDataFinal(dataFinal).criar();
+		ConsorcioBuilder.novo().comDataInicial(DATA_NULA).criar();
 	}
 	
 	@Test
@@ -101,7 +103,7 @@ public class ConsorcioTest {
 		
 		Consorcio consorcio = ConsorcioBuilder.novo().comDiaDeVencimento(vencimento).criar();
 		
-		assertEquals(vencimento, consorcio.getVencimento());
+		assertEquals(vencimento, consorcio.getDiaDeVencimento());
 	}
 	
 	@Test(expected = DiaInvalido.class)
@@ -120,7 +122,7 @@ public class ConsorcioTest {
 		
 		Consorcio consorcio = ConsorcioBuilder.novo().comDiaDeContemplacao(contemplacao).criar();
 		
-		assertEquals(contemplacao, consorcio.getVencimento());
+		assertEquals(contemplacao, consorcio.getDiaDeVencimento());
 	}
 	
 	@Test(expected = DiaInvalido.class)
@@ -131,5 +133,22 @@ public class ConsorcioTest {
 	@Test(expected = DiaInvalido.class)
 	public void nao_deve_permitir_informar_o_dia_de_contemplacao_maior_que_trinta_e_um() throws Exception {
 		ConsorcioBuilder.novo().comDiaDeVencimento(32).criar();
+	}
+	
+	@Test
+	public void deve_retornar_o_contemplado_do_mes() throws Exception {
+		BigDecimal valorDaParcela = BigDecimal.valueOf(100d);
+		Consorcio consorcio = ConsorcioBuilder.novo().comConsorciados(consorciados).comValorDaParcela(valorDaParcela).criar();
+		
+		assertNotNull(consorcio.obterContemplado());
+	}
+	
+	@Test
+	public void o_periodo_do_consorcio_deve_ser_igual_a_quantidade_de_participantes() throws Exception {
+		Date dataInicial = DateUtils.criarDataPara(01, Mes.ABRIL, 2016);
+		
+		Consorcio consorcio = ConsorcioBuilder.novo().comDataInicial(dataInicial).comConsorciados(consorciados).criar();
+		
+		assertEquals(Mes.AGOSTO, DateUtils.obterMesDa(consorcio.getDataFinal()));
 	}
 }
